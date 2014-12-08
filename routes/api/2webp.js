@@ -1,30 +1,60 @@
 var fs       = require('fs');
-var path     = require('path');
+var tempfile = require('tempfile');
 
 var cwebp    = require('cwebp-bin');
 var execFile = require('child_process').execFile;
 
+var extensionMap = {
+  'image/jpeg': '.jpg',
+  'image/png': '.png',
+  'image/gif': '.gif'
+};
+
 var post = function (request, response) {
 
-  var size = 0;
-  var before = 'before';
-  var after = 'after.webp';
+  var buffers = [];
+  var contentType = request.headers['content-type'];
+  var before = tempfile(extensionMap[contentType]);
+  var after = tempfile('.webp');
 
   request.on('data', function (chunk) {
-
-    fs.writeFileSync(before, chunk);
-    size += chunk.length;
+    buffers.push(chunk);
   });
 
   request.on('end', function () {
 
-    var args = [before, '-o', after];
-    execFile(cwebp.path, args, function (error) {
-      var buffer = fs.readFileSync(after);
-      response.send(buffer);
+    // concat buffer chunks
+    var buffer = Buffer.concat(buffers);
+
+    fs.writeFile(before, buffer, function (error) {
+
+      if (error) {
+        console.error(error);
+        fs.unlinkSync(before);
+        throw error;
+      }
+
+      // cwebp arguments
+      var args = [before, '-o', after];
+
+      execFile(cwebp.path, args, function (error) {
+
+        if (error) {
+          console.error(error);
+          fs.unlinkSync(before);
+          fs.unlinkSync(after);
+          throw error;
+        }
+
+        // return buffer
+        response.send(fs.readFileSync(after));
+
+        // remove temporary images
+        fs.unlinkSync(before);
+        fs.unlinkSync(after);
+      });
     });
   });
-
 };
 
 module.exports = {
