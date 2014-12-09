@@ -2,15 +2,29 @@ html {
   height: 100%;
 }
 body {
-  min-height: 100%;
+  height: 100%;
+  font-size: 16px;
+  font-family: Helvetica, Arial, sans-serif;
 }
-
 .drop {
   box-sizing: border-box;
   width: 100%;
-  height: 200px;
+  height: 300px;
   border: 5px dashed #ccc;
 }
+.input-file {
+  color: #ccc;
+  font-size: 48px;
+}
+.input-file::before {
+  display: inline-block;
+  content: 'Drag & drop or Click to select a image file!';
+  font-size: 48px;
+}
+.input-file::-webkit-file-upload-button {
+  display: none;
+}
+
 .container {
   display: flex;
 }
@@ -19,6 +33,11 @@ body {
 }
 .container--row {
   flex-direction: row;
+}
+.container--center {
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }
 .container__item {
   flex-grow: 1;
