@@ -3,10 +3,18 @@ html
   head
     meta(charset='utf-8')
     title WebP Converter
-    link(rel='stylesheet')
+    link(rel='stylesheet', href='/css/app.css')
   body
-    input#js-input(type='file', accept='.jpg,.png,image/jpeg,image/png')
-    img#js-image-before
-    a#js-download
-      img#js-image-after
+    .container.container--column
+      .container__item
+        #js-drop.drop
+        input#js-input(type='file', accept='.jpg,.png,image/jpeg,image/png')
+      .container__item
+        .container.container--row
+          .container__item
+            a#js-download-before
+              img#js-image-before(width='100%')
+          .container__item
+            a#js-download-after
+              img#js-image-after(width='100%')
     script(src='/js/app.js')
