@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function onDrop (e) {
     e.stopPropagation();
+    e.preventDefault();
     
     if (e.dataTransfer.files.length === 0) {
       return false;
