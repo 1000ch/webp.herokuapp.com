@@ -4,17 +4,22 @@ html
     meta(charset='utf-8')
     title WebP Converter
     link(rel='stylesheet', href='/css/app.css')
+    link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext', type='text/css')
   body
-    .container.container--column
-      .container__item
-        #js-drop.drop.container.container--center
-          input#js-input.input-file(type='file', accept='.jpg,.png,image/jpeg,image/png')
-      .container__item
-        .container.container--row
+    .container.container--row
+      .container__item.padding
+        .container.container--column
           .container__item
-            a#js-download-before
-              img#js-image-before(width='100%')
+            #js-drop.drop.container.container--center
+              input#js-input.input-file(type='file', accept='.jpg,.png,image/jpeg,image/png')
           .container__item
-            a#js-download-after
-              img#js-image-after(width='100%')
+            .container.container--row
+              .container__item
+                a#js-download-before
+                  img#js-image-before(width='100%')
+              .container__item
+                a#js-download-after
+                  img#js-image-after(width='100%')
+      .container__item.padding
+        h1 WebP Converter
     script(src='/js/app.js')
