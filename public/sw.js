@@ -1,23 +1,28 @@
-const CACHE_VERSION = 'webp-20141212';
+var CACHE_KEY = 'webp-20141212';
 
 self.addEventListener('install', function (e) {
   
-  console.log('sw:install', e);
+  console.log('Service Worker:install', e);
 
   // e.waitUntil waits callback for "install"
   e.waitUntil(
-    caches.open(CACHE_VERSION).then(function (cache) {
-      return cache.addAll([
-        '/css/app.min.css',
-        '/js/app.min.js'
-      ])
+    caches.open(CACHE_KEY).then(function (cache) {
+      cache.keys().then(function (keys) {
+        console.log(keys);
+        return cache.addAll([
+          '/css/app.min.css',
+          '/css/app.css',
+          '/js/app.min.js',
+          '/js/app.js'
+        ]);
+      });
     })
   );
 });
 
 self.addEventListener('activate', function (e) {
 
-  console.log('sw:activate', e);
+  console.log('Service Worker:activate', e);
 
   e.waitUntil(
     caches.keys().then(function (cacheNames) {
@@ -34,10 +39,10 @@ self.addEventListener('activate', function (e) {
 
 self.addEventListener('fetch', function (e) {
 
-  console.log('sw:fetch', e);
+  console.log('Service Worker:fetch', e);
 
   e.respondWith(
-    caches.open(CACHE_VERSION).then(function (cache) {
+    caches.open(CACHE_KEY).then(function (cache) {
       return cache.match(e.request).then(function (response) {
         return response || fetch(e.request.clone()).then(function (response) {
           cache.put(e.request, response.clone());

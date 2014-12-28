@@ -1,3 +1,11 @@
+navigator.serviceWorker.register('/sw.js', {
+  scope: '.'
+}).then(function onFulfilled(e) {
+  console.log('sw.js was installed as Service Worker: ', e);
+}, function onRejected(e) {
+  console.log('sw.js was not installed: ', e);
+});
+
 document.addEventListener('DOMContentLoaded', function () {
 
   var imageBefore    = document.querySelector('#js-image-before');
@@ -41,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function onDrop (e) {
+
     e.stopPropagation();
     e.preventDefault();
     
@@ -63,8 +72,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     downloadBefore.href = imageBefore.src = URL.createObjectURL(blobBefore);
-
-    return false;
   }
 
   input.addEventListener('change', function (e) {

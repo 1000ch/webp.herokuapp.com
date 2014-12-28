@@ -1,5 +1,4 @@
 var path = require('path');
-var fs   = require('fs');
 
 var express = require('express');
 var helmet  = require('helmet');
@@ -15,6 +14,7 @@ app.use(bodyParser.urlencoded({
 app.set('view engine', 'jade');
 app.set('views', path.join(__dirname, 'views'));
 
+app.use('/', express.static(path.join(__dirname, '/public')));
 app.use('/js', express.static(path.join(__dirname, '/public/js')));
 app.use('/css', express.static(path.join(__dirname, '/public/css')));
 app.use('/img', express.static(path.join(__dirname, '/public/img')));

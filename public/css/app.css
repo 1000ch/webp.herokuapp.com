@@ -8,19 +8,6 @@ body {
   font-size: 16px;
   font-family: Lato, Helvetica, Arial, sans-serif;
 }
-.background {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-.background__image {
-  position: absolute;
-  top: -50%;
-  left: 0;
-  width: 200%;
-  -webkit-filter: blur(100px);
-  z-index: -1;
-}
 .drop {
   box-sizing: border-box;
   width: 100%;
