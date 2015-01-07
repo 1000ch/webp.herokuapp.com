@@ -1,10 +1,12 @@
-navigator.serviceWorker.register('/sw.js', {
-  scope: '.'
-}).then(function onFulfilled(e) {
-  console.log('sw.js was installed as Service Worker: ', e);
-}, function onRejected(e) {
-  console.log('sw.js was not installed: ', e);
-});
+if (navigator.serviceWorker && navigator.serviceWorker.register) {
+  navigator.serviceWorker.register('/sw.js', {
+    scope: '.'
+  }).then(function onFulfilled(e) {
+    console.log('sw.js was installed as Service Worker: ', e);
+  }, function onRejected(e) {
+    console.log('sw.js was not installed: ', e);
+  });
+}
 
 document.addEventListener('DOMContentLoaded', function () {
 
