@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.set('view engine', 'jade');
+app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use('/', express.static(path.join(__dirname, '/public')));
@@ -20,9 +20,10 @@ app.use('/css', express.static(path.join(__dirname, '/public/css')));
 app.use('/img', express.static(path.join(__dirname, '/public/img')));
 
 app.get('/', require('./routes/index'));
-app.post('/api/2webp', require('./routes/api/2webp').post);
+app.post('/api/cwebp', require('./routes/api/cwebp').post);
 
 var port = process.env.PORT || 5000;
+
 app.listen(port, function () {
   console.log('Express server listening on port ' + port);
 });

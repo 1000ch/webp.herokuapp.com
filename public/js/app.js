@@ -1,13 +1,3 @@
-if (navigator.serviceWorker && navigator.serviceWorker.register) {
-  navigator.serviceWorker.register('/sw.js', {
-    scope: '.'
-  }).then(function onFulfilled(e) {
-    console.log('sw.js was installed as Service Worker: ', e);
-  }, function onRejected(e) {
-    console.log('sw.js was not installed: ', e);
-  });
-}
-
 document.addEventListener('DOMContentLoaded', function () {
 
   var imageBefore    = document.querySelector('#js-image-before');
@@ -97,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
   
   function sendBlob (blob, callback) {
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/api/2webp', true);
+    xhr.open('POST', '/api/cwebp', true);
     xhr.responseType = 'blob';
     //xhr.responseType = 'arraybuffer';
     xhr.onload = function (e) {

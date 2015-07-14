@@ -1,4 +1,4 @@
-var fs       = require('fs');
+var fs      = require('fs');
 var tempfile = require('tempfile');
 
 var cwebp    = require('cwebp-bin');
@@ -37,7 +37,7 @@ var post = function (request, response) {
       // cwebp arguments
       var args = [before, '-o', after];
 
-      execFile(cwebp.path, args, function (error) {
+      execFile(cwebp, args, function (error) {
 
         if (error) {
           console.error(error);
