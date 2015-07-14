@@ -1,7 +1,6 @@
-var path = require('path');
-
-var express = require('express');
-var helmet  = require('helmet');
+var path    = require('path');
+var express   = require('express');
+var helmet    = require('helmet');
 var bodyParser = require('body-parser');
 
 var app = express();
