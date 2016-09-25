@@ -4,16 +4,16 @@ const tempfile = require('tempfile');
 const cwebp = require('cwebp-bin');
 const execFileP = pify(require('child_process').execFile);
 
-const extensionMap = {
-  'image/jpeg': '.jpg',
-  'image/png': '.png',
-  'image/gif': '.gif'
-};
+const extensions = new Map([
+  ['image/jpeg', '.jpg'],
+  ['image/png', '.png'],
+  ['image/gif', '.gif']
+]);
 
 module.exports.post = (request, response) => {
   const buffers = [];
   const contentType = request.headers['content-type'];
-  const before = tempfile(extensionMap[contentType]);
+  const before = tempfile(extensions.get(contentType));
   const after = tempfile('.webp');
 
   request.on('data', chunk => {
