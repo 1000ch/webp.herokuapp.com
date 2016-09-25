@@ -1,44 +1,35 @@
-var fs      = require('fs');
-var tempfile = require('tempfile');
+const fs = require('fs');
+const tempfile = require('tempfile');
+const cwebp = require('cwebp-bin');
+const execFile = require('child_process').execFile;
 
-var cwebp    = require('cwebp-bin');
-var execFile = require('child_process').execFile;
-
-var extensionMap = {
+const extensionMap = {
   'image/jpeg': '.jpg',
   'image/png': '.png',
   'image/gif': '.gif'
 };
 
-var post = function (request, response) {
+module.exports.post = (request, response) => {
+  const buffers = [];
+  const contentType = request.headers['content-type'];
+  const before = tempfile(extensionMap[contentType]);
+  const after = tempfile('.webp');
 
-  var buffers = [];
-  var contentType = request.headers['content-type'];
-  var before = tempfile(extensionMap[contentType]);
-  var after = tempfile('.webp');
-
-  request.on('data', function (chunk) {
+  request.on('data', chunk => {
     buffers.push(chunk);
   });
 
-  request.on('end', function () {
+  request.on('end', () => {
+    const buffer = Buffer.concat(buffers);
 
-    // concat buffer chunks
-    var buffer = Buffer.concat(buffers);
-
-    fs.writeFile(before, buffer, function (error) {
-
+    fs.writeFile(before, buffer, error => {
       if (error) {
         console.error(error);
         fs.unlinkSync(before);
         throw error;
       }
 
-      // cwebp arguments
-      var args = [before, '-o', after];
-
-      execFile(cwebp, args, function (error) {
-
+      execFile(cwebp, [before, '-o', after], error => {
         if (error) {
           console.error(error);
           fs.unlinkSync(before);
@@ -46,17 +37,19 @@ var post = function (request, response) {
           throw error;
         }
 
-        // return buffer
-        response.send(fs.readFileSync(after));
+        fs.readFile(after, (error, buffer) => {
+          if (error) {
+            console.error(error);
+            fs.unlinkSync(before);
+            fs.unlinkSync(after);
+            throw error;
+          }
 
-        // remove temporary images
-        fs.unlinkSync(before);
-        fs.unlinkSync(after);
+          response.send(buffer);
+          fs.unlinkSync(before);
+          fs.unlinkSync(after);
+        });
       });
     });
   });
-};
-
-module.exports = {
-  post: post
 };

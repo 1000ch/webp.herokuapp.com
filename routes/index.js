@@ -1,3 +1,3 @@
-module.exports = function (request, response) {
+module.exports = (request, response) => {
   response.render('index');
 };
