@@ -1,6 +1,7 @@
 {
   "name": "webp",
-  "description": "WebP.herokuapp.com is web application for converting images into WebP format.",
+  "description": "Web App that converts images into WebP format.",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git://github.com/1000ch/webp.herokuapp.com.git"
