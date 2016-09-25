@@ -1,7 +1,8 @@
-const fs = require('fs');
+const pify = require('pify');
+const fsP = pify(require('fs'));
 const tempfile = require('tempfile');
 const cwebp = require('cwebp-bin');
-const execFile = require('child_process').execFile;
+const execFileP = pify(require('child_process').execFile);
 
 const extensionMap = {
   'image/jpeg': '.jpg',
@@ -20,36 +21,18 @@ module.exports.post = (request, response) => {
   });
 
   request.on('end', () => {
-    const buffer = Buffer.concat(buffers);
-
-    fs.writeFile(before, buffer, error => {
-      if (error) {
+    fsP.writeFile(before, Buffer.concat(buffers))
+      .then(() => execFileP(cwebp, [before, '-o', after]))
+      .then(() => fsP.readFile(after))
+      .then(buffer => {
+        response.send(buffer);
+        fsP.unlink(before);
+        fsP.unlink(after);
+      })
+      .catch(error => {
         console.error(error);
-        fs.unlinkSync(before);
-        throw error;
-      }
-
-      execFile(cwebp, [before, '-o', after], error => {
-        if (error) {
-          console.error(error);
-          fs.unlinkSync(before);
-          fs.unlinkSync(after);
-          throw error;
-        }
-
-        fs.readFile(after, (error, buffer) => {
-          if (error) {
-            console.error(error);
-            fs.unlinkSync(before);
-            fs.unlinkSync(after);
-            throw error;
-          }
-
-          response.send(buffer);
-          fs.unlinkSync(before);
-          fs.unlinkSync(after);
-        });
+        fsP.unlink(before);
+        fsP.unlink(after);
       });
-    });
   });
 };
