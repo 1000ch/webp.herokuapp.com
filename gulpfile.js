@@ -1,18 +1,18 @@
-var gulp    = require('gulp');
-var concat  = require('gulp-concat');
-var uglify  = require('gulp-uglify');
-var csso    = require('gulp-csso');
-var csscomb = require('gulp-csscomb');
+const gulp = require('gulp');
+const concat = require('gulp-concat');
+const uglify = require('gulp-uglify');
+const csso = require('gulp-csso');
+const csscomb = require('gulp-csscomb');
 
-gulp.task('js', function () {
-  gulp.src(['public/js/app.js'])
+gulp.task('js', () => {
+  return gulp.src(['public/js/app.js'])
     .pipe(concat('app.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('public/js'))
 });
 
-gulp.task('css', function () {
-  gulp.src(['public/css/app.css'])
+gulp.task('css', () => {
+  return gulp.src(['public/css/app.css'])
     .pipe(concat('app.min.css'))
     .pipe(csscomb())
     .pipe(csso())
